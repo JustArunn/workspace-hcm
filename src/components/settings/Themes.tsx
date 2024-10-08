@@ -8,7 +8,6 @@ const Themes: React.FC = () => {
     { bg: "#0078D4", font: "#FFFFFF" }, // Microsoft - bg-blue-500, text-white
     { bg: "#22C55E", font: "#FFFFFF" }, // Green - bg-green-500, text-white
     { bg: "#EF4444", font: "#FFFFFF" }, // Red - bg-red-500, text-white
-    { bg: "#FBBF24", font: "#000000" }, // Yellow - bg-yellow-500, text-black
     { bg: "#A855F7", font: "#FFFFFF" }, // Purple - bg-purple-500, text-white
     { bg: "#1F2937", font: "#FFFFFF" }, // Gray - bg-gray-800, text-white
     { bg: "#D946EF", font: "#FFFFFF" }, // Pink - bg-pink-500, text-white
@@ -18,7 +17,6 @@ const Themes: React.FC = () => {
     { bg: "#FF9900", font: "#FFFFFF" }, // Amazon - bg-orange, text-white
     { bg: "#E63946", font: "#FFFFFF" }, // Spotify - bg-red, text-white
     { bg: "#00A6A6", font: "#FFFFFF" }, // Twitter - bg-teal, text-white
-    { bg: "#FFCC00", font: "#000000" }, // Airbnb - bg-yellow, text-black
     { bg: "#4B6F44", font: "#FFFFFF" }, // Whole Foods - bg-dark-green, text-white
     { bg: "#F05023", font: "#FFFFFF" }, // Facebook - bg-orange-red, text-white
     { bg: "#1DA1F2", font: "#FFFFFF" }, // Twitter - bg-blue, text-white

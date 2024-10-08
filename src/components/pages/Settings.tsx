@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { Toggle, Icon } from "@fluentui/react";
+import { Icon } from "@fluentui/react";
 import SearchFilters from "../settings/SearchFilters";
 import Themes from "../settings/Themes";
+import ManageFeatures from "../settings/ManageFeatures";
+import LicenseDetails from "../settings/LicenseDetails";
+import Notifications from "../settings/Notifications";
 
 const settingsData = [
   {
@@ -15,28 +18,29 @@ const settingsData = [
     category: "View",
     items: [
       { name: "Search Filters", icon: "Filter" },
-      { name: "Show Hide Feature", icon: "Hide3" },
       { name: "Exclude Users", icon: "UserRemove" },
+      { name: "Manage Features", icon: "Hide3" },
+      { name: "Manage Views", icon: "View" },
     ],
   },
   {
-    category: "Privacy",
+    category: "Access Control",
     items: [
-      { name: "Data Sharing", icon: "DataManagement" },
-      { name: "Cookies", icon: "Cookies" },
+      { name: "Restricted Access", icon: "Lock" },
+      { name: "Hide User Properties", icon: "FabricUserFolder" },
+      { name: "Roles and Permisstions", icon: "Permissions" },
     ],
   },
   {
     category: "Notifications",
     items: [
-      { name: "Email Alerts", icon: "Mail" },
-      { name: "SMS Alerts", icon: "Message" },
+      { name: "Notifications Control", icon: "Message" },
     ],
   },
   {
-    category: "Billing",
+    category: "License",
     items: [
-      { name: "Payment Methods", icon: "PaymentCard" },
+      { name: "License Details", icon: "PaymentCard" },
       { name: "Invoices", icon: "Receipt" },
     ],
   },
@@ -44,9 +48,6 @@ const settingsData = [
 
 const Settings = () => {
   const [activeSetting, setActiveSetting] = useState("Language");
-  const [emailAlerts, setEmailAlerts] = useState(false);
-  const [smsAlerts, setSmsAlerts] = useState(false);
-  const [dataSharing, setDataSharing] = useState(false);
 
   const handleSettingClick = (settingName: any) => {
     setActiveSetting(settingName);
@@ -77,61 +78,12 @@ const Settings = () => {
       </div>
 
       <div className="flex-grow p-6 bg-white overflow-y-auto max-h-screen">
-        <h2 className="text-2xl font-semibold mb-5">
-          {activeSetting && `${activeSetting}`}
-        </h2>
-
-        {
-          activeSetting === "Search Filters" && <SearchFilters/>
-        }
-
-        {
-          activeSetting === "Theme" && <Themes/>
-        }
-
-        {activeSetting === "Show Hide Feature" && (
-          <div className="bg-gray-50 p-4 rounded-md mb-4 shadow">
-            <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <label htmlFor="emailAlerts" className="font-semibold">
-                Show Events
-              </label>
-              <Toggle
-                checked={emailAlerts}
-                onChange={() => setEmailAlerts(!emailAlerts)}
-              />
-            </div>
-
-            <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <label htmlFor="smsAlerts" className="font-semibold">
-                Show Dashboard
-              </label>
-              <Toggle
-                checked={smsAlerts}
-                onChange={() => setSmsAlerts(!smsAlerts)}
-              />
-            </div>
-            <div className="flex justify-between items-center border-b border-gray-300 py-2">
-              <label htmlFor="smsAlerts" className="font-semibold">
-                Show Meetings
-              </label>
-              <Toggle
-                checked={smsAlerts}
-                onChange={() => setSmsAlerts(!smsAlerts)}
-              />
-            </div>
-
-            <div className="flex justify-between items-center py-2">
-              <label htmlFor="dataSharing" className="font-semibold">
-                Show Organization Chart
-              </label>
-              <Toggle
-                checked={dataSharing}
-                onChange={() => setDataSharing(!dataSharing)}
-              />
-            </div>
-          </div>
-        )}
-
+        <h2 className="text-2xl font-semibold mb-5">{activeSetting}</h2>
+        {activeSetting === "Search Filters" && <SearchFilters />}
+        {activeSetting === "Theme" && <Themes />}
+        {activeSetting === "Show Hide Feature" && <ManageFeatures />}
+        {activeSetting === "License Details" && <LicenseDetails/>}
+        {activeSetting === "Notifications Control" && <Notifications/>}
       </div>
     </div>
   );

@@ -3,10 +3,12 @@ import { useAuth, useThemes } from "../../context/Context";
 import { useEffect, useState } from "react";
 import Person from "../custom/Persona";
 import Heading from "../utils/Heading";
+import Loader from "../custom/Loader";
 
 const ProfileCard = () => {
   const [user, setUser] = useState<any>(null);
   const [manager, setManager] = useState<any>(null);
+  const [loadgin, setLoading] = useState(false);
 
   const { getCurrentUser, getUsers } = useAuth();
 
@@ -43,7 +45,9 @@ const ProfileCard = () => {
               </tr>
               <tr>
                 <td className="border px-4 py-2">Admin</td>
-                <td className="border px-4 py-2">{user.isAdmin ? "Yes":"No"}</td>
+                <td className="border px-4 py-2">
+                  {user.isAdmin ? "Yes" : "No"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -72,11 +76,10 @@ const ProfileCard = () => {
 
   useEffect(() => {
     getCurrentUser().then(async (email: string) => {
+      setLoading(true);
       const users = await getUsers();
 
       const user = users.find((x: any) => x.primaryEmail === email);
-
-      console.log("user and manager", { user, manager });
 
       const userData = {
         id: user.id,
@@ -94,6 +97,7 @@ const ProfileCard = () => {
       if (user.isAdmin === true) {
         setManager(null);
         setUser(userData);
+        setLoading(false);
         return;
       }
       const userManager = users.find(
@@ -112,106 +116,116 @@ const ProfileCard = () => {
       };
       setUser(userData);
       setManager(managerData);
+      setLoading(false);
     });
   }, []);
 
   return (
     <div className="w-full h-full ">
-      <div className="mt-4"><Heading>Profile</Heading></div>
-      {user !== null && (
-        <div className="flex flex-col p-6">
-          <div className="flex mb-4">
-            <div className="w-1/8">
-              <Person
-                imageUrl={user?.image}
-                imageInitials={user?.name[0]}
-                size={PersonaSize.size100}
-                block
-              />
-            </div>
-            <div className="w-2/3 pl-4">
-              <h2 className="text-xl font-bold">{user.name}</h2>
-              <p className="text-gray-700">
-                {user.department} | {user.jobTitle}
-              </p>
+      <div className="mt-4">
+        <Heading>Profile</Heading>
+      </div>
 
-              <p className="text-gray-700">{user.location}</p>
-              <div className="flex mt-4">
-                <Icon
-                  styles={{ root: { fontSize: "16px" } }}
-                  iconName="Phone"
-                  className="mr-4 cursor-pointer"
-                />
-                <Icon
-                  styles={{ root: { fontSize: "16px" } }}
-                  iconName="Mail"
-                  className="mr-4 cursor-pointer"
-                />
-                <Icon
-                  styles={{ root: { fontSize: "16px" } }}
-                  iconName="Org"
-                  className="mr-4 cursor-pointer"
-                />
+      {loadgin ? (
+        <div className="w-full h-[90vh] flex  items-center justify-center"><Loader /></div>
+      ) : (
+        <>
+          {user !== null && (
+            <div className="flex flex-col p-6">
+              <div className="flex mb-4">
+                <div className="w-1/8">
+                  <Person
+                    imageUrl={user?.image}
+                    imageInitials={user?.name[0]}
+                    size={PersonaSize.size100}
+                    block
+                  />
+                </div>
+                <div className="w-2/3 pl-4">
+                  <h2 className="text-xl font-bold">{user.name}</h2>
+                  <p className="text-gray-700">
+                    {user.department} | {user.jobTitle}
+                  </p>
+
+                  <p className="text-gray-700">{user.location}</p>
+                  <div className="flex mt-4">
+                    <Icon
+                      styles={{ root: { fontSize: "16px" } }}
+                      iconName="Phone"
+                      className="mr-4 cursor-pointer"
+                    />
+                    <Icon
+                      styles={{ root: { fontSize: "16px" } }}
+                      iconName="Mail"
+                      className="mr-4 cursor-pointer"
+                    />
+                    <Icon
+                      styles={{ root: { fontSize: "16px" } }}
+                      iconName="Org"
+                      className="mr-4 cursor-pointer"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex justify-around border-b pb-2">
-              <button
-                onClick={() => setActiveTab("office")}
-                className={`py-2 px-4 focus:outline-none ${
-                  activeTab === "office"
-                    ? "font-bold border-b-2 border-blue-500"
-                    : ""
-                }`}
-                style={{
-                  borderColor: activeTab === "office" ? bgColor : "",
-                }}
-              >
-                Office Info
-              </button>
-              <button
-                onClick={() => setActiveTab("personal")}
-                className={`py-2 px-4 focus:outline-none ${
-                  activeTab === "personal"
-                    ? "font-bold border-b-2 border-blue-500"
-                    : ""
-                }`}
-                style={{
-                  borderColor: activeTab === "personal" ? bgColor : "",
-                }}
-              >
-                Personal Info
-              </button>
-              <button
-                onClick={() => setActiveTab("hr")}
-                className={`py-2 px-4 focus:outline-none ${
-                  activeTab === "hr"
-                    ? "font-bold border-b-2 border-blue-500"
-                    : ""
-                }`}
-                style={{
-                  borderColor: activeTab === "hr" ? bgColor : "",
-                }}
-              >
-                HR Settings
-              </button>
-            </div>
-            <div className="p-4 mt-2">{renderTabContent()}</div>
-          </div>
-          {manager !== null && <div className="border border-[#ddd]"></div>}
-          {manager !== null && (
-            <div className="w-1/8 mt-2">
-              <Person
-                imageUrl={manager.image}
-                text={manager.name}
-                secondaryText={`${manager.jobTitle} | ${manager.department}`}
-                imageInitials={user.name[0]}
-                size={PersonaSize.size56}
-              />
+              <div className="mt-4">
+                <div className="flex justify-around border-b pb-2">
+                  <button
+                    onClick={() => setActiveTab("office")}
+                    className={`py-2 px-4 focus:outline-none ${
+                      activeTab === "office"
+                        ? "font-bold border-b-2 border-blue-500"
+                        : ""
+                    }`}
+                    style={{
+                      borderColor: activeTab === "office" ? bgColor : "",
+                    }}
+                  >
+                    Office Info
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("personal")}
+                    className={`py-2 px-4 focus:outline-none ${
+                      activeTab === "personal"
+                        ? "font-bold border-b-2 border-blue-500"
+                        : ""
+                    }`}
+                    style={{
+                      borderColor: activeTab === "personal" ? bgColor : "",
+                    }}
+                  >
+                    Personal Info
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("hr")}
+                    className={`py-2 px-4 focus:outline-none ${
+                      activeTab === "hr"
+                        ? "font-bold border-b-2 border-blue-500"
+                        : ""
+                    }`}
+                    style={{
+                      borderColor: activeTab === "hr" ? bgColor : "",
+                    }}
+                  >
+                    HR Settings
+                  </button>
+                </div>
+                <div className="p-4 mt-2">{renderTabContent()}</div>
+              </div>
+              {manager !== null && <div className="border border-[#ddd]"></div>}
+              {manager !== null && (
+                <div className="w-1/8 mt-2">
+                  <Person
+                    imageUrl={manager.image}
+                    text={manager.name}
+                    secondaryText={`${manager.jobTitle} | ${manager.department}`}
+                    imageInitials={user.name[0]}
+                    size={PersonaSize.size56}
+                  />
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
