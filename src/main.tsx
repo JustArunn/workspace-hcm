@@ -1,12 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import "./index.css";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
 import { initializeIcons } from "@fluentui/react";
-initializeIcons();
+import { Provider } from "./context/Context.tsx";
+import { BrowserRouter } from "react-router-dom";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+initializeIcons();
+createRoot(document.getElementById("root")!).render(
+  <BrowserRouter>
+    <Provider>
+      <App />
+    </Provider>
+  </BrowserRouter>
+);

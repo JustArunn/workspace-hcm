@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  height: 18px;
+  width: 18px;
+}
+
+::-webkit-scrollbar-button {
+  background-color: #fff;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 9px;
+  border: solid 6px #fff;
+  @apply bg-gray-400;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #fff;
+}
+
+.sx-react-calendar-wrapper {
+  height: 95vh;
+}
+.sx__calendar-wrapper{
+  width: 100%;
+}
