@@ -17,7 +17,7 @@ interface IProvider {
 const API_KEY = import.meta.env.VITE_API_KEY;
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const scopes =
-  "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.group.member https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.user.security https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/devstorage.full_control https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/calendar";
+  "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.group.member https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.user.security https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar";
 
 export const Provider: FC<IProvider> = ({ children }) => {
   const [loggedin, setLoggedIn] = useState(false);
@@ -25,6 +25,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
   const [searchFilters, setSearchFilter] = useState([]);
   const [isNavExpended, setIsNavExpended] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+  const [allUsers, setAllUsers] = useState([]);
 
   //Themes States
   const [bgColor, setBgColor] = useState("#0078D4");
@@ -154,8 +155,11 @@ export const Provider: FC<IProvider> = ({ children }) => {
           scope: scopes,
         })
         .then(async () => {
+          //load clients
           await gapi.client.load("admin", "directory_v1");
           await gapi.client.load("calendar", "v3");
+          await gapi.client.load("gmail", "v1");
+
           const userSignInState = gapi.auth2.getAuthInstance().isSignedIn.get();
           if (userSignInState) {
             setLoggedIn(true);
@@ -170,6 +174,30 @@ export const Provider: FC<IProvider> = ({ children }) => {
     });
   };
 
+  const sendEmail = async (toList: any, subject: any, body: string) => {
+    const to = toList.join(", ");
+
+    const email = [`To: ${to}`, `Subject: ${subject}`, "", body].join("\n");
+
+    const base64EncodedEmail = btoa(email)
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_");
+
+    const request = {
+      userId: "me",
+      resource: {
+        raw: base64EncodedEmail,
+      },
+    };
+
+    try {
+      await gapi.client.gmail.users.messages.send(request);
+      console.log("Email sent successfully!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
+
   useEffect(() => {
     signInOnLoad();
   }, [loggedin]);
@@ -182,6 +210,8 @@ export const Provider: FC<IProvider> = ({ children }) => {
     bgColor,
     fontColor,
     currentUser,
+    allUsers,
+    setAllUsers,
     setBgColor,
     setFontColor,
     setIsNavExpended,
@@ -192,6 +222,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
     getCalendarEvents,
     getMeetings,
     getCurrentUser,
+    sendEmail,
   };
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

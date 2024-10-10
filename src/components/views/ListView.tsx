@@ -5,8 +5,10 @@ import {
 } from "@fluentui/react";
 import { FC, useEffect, useState } from "react";
 import { useAuth } from "../../context/Context";
-import PageIconButton from "../custom/icons/PageIconButton";
 import Person from "../custom/Persona";
+import PageIcon from "../custom/icons/PageIcon";
+import EmployeeInfo from "../modals/EmployeeInfo";
+import UpdateUserForm from "../common/UpdateUserForm";
 
 interface IListView {
   users: any[];
@@ -16,7 +18,7 @@ const ListStyles: any = {
   root: {
     overflow: "auto",
     minHeight: "300px",
-    flexGrow: 1, // Allow the list to grow
+    flexGrow: 1,
   },
   cellContent: {
     display: "flex",
@@ -26,20 +28,29 @@ const ListStyles: any = {
   container: {
     display: "flex",
     flexDirection: "column",
-    transition: "width 0.3s ease, opacity 0.3s ease", // Transition for width and opacity
+    transition: "width 0.3s ease, opacity 0.3s ease",
   },
   detailsList: {
-    flexGrow: 1, // Make the DetailsList take up remaining space
+    flexGrow: 1,
     width: "100%",
   },
 };
 
-const ListView: FC<IListView> = ({ users }: IListView) => {
-  const { isNavExpended } = useAuth();
+const ListView: FC<IListView> = ({ users }) => {
+  const { isNavExpended, allUsers } = useAuth();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [user, setUser] = useState(null);
+  const [manager, setManager] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openProfileCard, setOpenProfilCard] = useState(false);
+
 
   const handleEdit = (user: any) => {
     console.log("edit user", user);
+    const manager = allUsers.find((y: any) => y.email === user.manager);
+    setManager(manager);
+    setUser(user);
+    setOpenEdit(true);
   };
 
   const columns: IColumn[] = [
@@ -50,7 +61,15 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
       minWidth: 200,
       isMultiline: false,
       onRender: (x: any) => (
-        <div style={ListStyles.cellContent}>
+        <div
+          onClick={() => {
+            const manager = allUsers.find((y: any) => y.email === x.manager);
+            setManager(manager);
+            setUser(x);
+            setOpenProfilCard(true);
+          }}
+          style={{ ...ListStyles.cellContent, cursor: "pointer" }}
+        >
           <Person
             text={x.name}
             secondaryText={x.jobTitle}
@@ -66,9 +85,7 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
       fieldName: "email",
       minWidth: 150,
       isMultiline: false,
-      onRender: (x: any) => (
-        <div style={ListStyles.cellContent}>{x.email}</div>
-      ),
+      onRender: (x: any) => <div style={ListStyles.cellContent}>{x.email}</div>,
     },
     {
       key: "column3",
@@ -76,9 +93,7 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
       fieldName: "phone",
       minWidth: 150,
       isMultiline: false,
-      onRender: (x: any) => (
-        <div style={ListStyles.cellContent}>{x.phone}</div>
-      ),
+      onRender: (x: any) => <div style={ListStyles.cellContent}>{x.phone}</div>,
     },
     {
       key: "column4",
@@ -97,7 +112,11 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
       minWidth: 150,
       isMultiline: false,
       onRender: (x: any) => (
-        <div style={ListStyles.cellContent}>{x.location}</div>
+        <div style={ListStyles.cellContent}>
+          <p>{x.location.buildingId}</p>
+          <p>{x.location.floorName}</p>
+          <p>{x.location.floorSection}</p>
+        </div>
       ),
     },
     {
@@ -118,23 +137,23 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
       isMultiline: false,
       onRender: (x: any) => (
         <div style={ListStyles.cellContent}>
-          <PageIconButton
+          <PageIcon
             onClick={() => handleEdit(x)}
-            iconProps={{ iconName: "Edit" }}
+            iconName="Edit"
+            fontSize="16px"
           />
         </div>
       ),
     },
   ];
 
-  // Conditionally filter out the Department column
   const filteredColumns = isNavExpended
-    ? columns.filter(col => col.key !== "column6")
+    ? columns.filter((col) => col.key !== "column6")
     : columns;
 
   useEffect(() => {
     setIsTransitioning(true);
-    const timer = setTimeout(() => setIsTransitioning(false), 300); // Match with transition duration
+    const timer = setTimeout(() => setIsTransitioning(false), 300);
     return () => clearTimeout(timer);
   }, [isNavExpended]);
 
@@ -143,7 +162,7 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
       style={{
         ...ListStyles.container,
         width: isNavExpended ? "95%" : "100%",
-        opacity: isTransitioning ? 0.5 : 1, // Adjust opacity during transition
+        opacity: isTransitioning ? 0.5 : 1,
       }}
     >
       <DetailsList
@@ -152,6 +171,21 @@ const ListView: FC<IListView> = ({ users }: IListView) => {
         selectionMode={SelectionMode.none}
         styles={ListStyles}
       />
+      {user !== null && (
+        <EmployeeInfo
+          employee={user}
+          manager={manager}
+          isOpen={openProfileCard}
+          onDismiss={() => setOpenProfilCard(false)}
+        />
+      )}
+      {user !== null && (
+        <UpdateUserForm
+          isOpen={openEdit}
+          onDismiss={() => setOpenEdit(false)}
+          user={user}
+        />
+      )}
     </div>
   );
 };

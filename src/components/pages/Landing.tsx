@@ -249,11 +249,6 @@ const ContactUs = () => {
     e.preventDefault();
     console.log("Form submitted:", formData);
     setSubmitted(true);
-    setFormData({
-      name: "",
-      email: "",
-      message: "",
-    });
   };
 
   return (

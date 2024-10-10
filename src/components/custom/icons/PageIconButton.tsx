@@ -8,9 +8,16 @@ const PageIconButton: FC<IButtonProps> = (props) => {
   return (
     <div>
       <IconButton
-        styles={{ root: { color: bgColor } }}
-        onClick={props.onClick}
         {...props}
+        styles={{
+          root: {
+            color: bgColor, // Icon color
+            "& .ms-Button:hover": {
+              color: bgColor,
+            },
+          },
+        }}
+        onClick={props.onClick}
       />
     </div>
   );

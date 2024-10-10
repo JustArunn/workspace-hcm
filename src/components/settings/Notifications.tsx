@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAuth } from "../../context/Context";
 
 const employees = [
   { id: 1, name: "HR" },
@@ -9,28 +10,39 @@ const employees = [
 
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState("birthdays");
+  const { sendEmail } = useAuth();
   const [recipients, setRecipients] = useState({
     birthdays: [],
     anniversaries: [],
     incorrectInfo: [],
   });
 
-  const handleRecipientChange = (event, type) => {
+  const handleRecipientChange = (event: any, type: any) => {
     const { value, checked } = event.target;
-    setRecipients((prev) => {
+    setRecipients((prev: any) => {
       const newRecipients = checked
         ? [...prev[type], value]
-        : prev[type].filter((recipient) => recipient !== value);
+        : prev[type].filter((recipient: any) => recipient !== value);
       return { ...prev, [type]: newRecipients };
     });
   };
 
-  const handleSave = () => {
-    const settings = {
-      recipients,
-    };
-    // Save settings logic here (e.g., API call)
-    console.log(settings);
+  const handleSave = async () => {
+    // const settings = {
+    //   recipients,
+    // };
+    // // Save settings logic here (e.g., API call)
+    // console.log(settings);
+    await sendEmail(
+      [
+        "just.arunn@gmail.com",
+        "adele.v@megazap.us",
+        "james@megazap.us",
+        "kambojsama84@gmail.com",
+      ],
+      "Hey there",
+      "how are youuuuuuuuu"
+    );
   };
 
   return (
@@ -75,13 +87,15 @@ const Notifications = () => {
       {activeTab === "birthdays" && (
         <div>
           <h3 className="font-semibold text-gray-700">Select Recipients:</h3>
-          {employees.map((employee) => (
+          {employees.map((employee: any) => (
             <div key={employee.id} className="my-1">
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   value={employee.name}
-                  checked={recipients.birthdays.includes(employee.name)}
+                  checked={recipients.birthdays.includes(
+                    employee.name as never
+                  )}
                   onChange={(e) => handleRecipientChange(e, "birthdays")}
                   className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded"
                 />
@@ -95,13 +109,15 @@ const Notifications = () => {
       {activeTab === "anniversaries" && (
         <div>
           <h3 className="font-semibold text-gray-700">Select Recipients:</h3>
-          {employees.map((employee) => (
+          {employees.map((employee: any) => (
             <div key={employee.id} className="my-1">
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   value={employee.name}
-                  checked={recipients.anniversaries.includes(employee.name)}
+                  checked={recipients.anniversaries.includes(
+                    employee.name as never
+                  )}
                   onChange={(e) => handleRecipientChange(e, "anniversaries")}
                   className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded"
                 />
@@ -115,13 +131,15 @@ const Notifications = () => {
       {activeTab === "incorrectInfo" && (
         <div>
           <h3 className="font-semibold text-gray-700">Select Recipients:</h3>
-          {employees.map((employee) => (
+          {employees.map((employee: any) => (
             <div key={employee.id} className="my-1">
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   value={employee.name}
-                  checked={recipients.incorrectInfo.includes(employee.name)}
+                  checked={recipients.incorrectInfo.includes(
+                    employee.name as never
+                  )}
                   onChange={(e) => handleRecipientChange(e, "incorrectInfo")}
                   className="mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded"
                 />

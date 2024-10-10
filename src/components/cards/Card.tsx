@@ -26,7 +26,7 @@ const Card = ({ user, manager }: any) => {
         {user.email}
       </p>
       <p className="mt-1 text-[14px] text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis">
-        {user.location}
+        {user.location.floorName}
       </p>
       <p className="mt-1 text-[14px] text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis">
         {user.phone}

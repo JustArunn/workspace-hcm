@@ -1,12 +1,20 @@
-import { useState } from "react";
-import { Modal, PersonaSize } from "@fluentui/react";
-import { Icon } from "@fluentui/react/lib/Icon";
-import Person from "../custom/Persona";
 import { useThemes } from "../../context/Context";
+import { Modal, PersonaSize } from "@fluentui/react";
+import { useState } from "react";
+import Person from "../custom/Persona";
+import PageIcon from "../custom/icons/PageIcon";
+import UpdateUserForm from "../common/UpdateUserForm";
 
-const EmployeeInfo = ({ employee, manager, isOpen, onDismiss }: any) => {
+const EmployeeInfo = ({
+  employee,
+  manager,
+  isOpen,
+  onDismiss,
+}: any) => {
   const [activeTab, setActiveTab] = useState("office");
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { bgColor } = useThemes();
+
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -30,11 +38,15 @@ const EmployeeInfo = ({ employee, manager, isOpen, onDismiss }: any) => {
               </tr>
               <tr>
                 <td className="border px-4 py-2">Office Location</td>
-                <td className="border px-4 py-2">{employee.location}</td>
+                <td className="border px-4 py-2">
+                  {employee.location.buildingId} {employee.location.floorName}
+                  {", "}
+                  {employee.location.floorSection}
+                </td>
               </tr>
               <tr>
-                <td className="border px-4 py-2">Date of Joining</td>
-                <td className="border px-4 py-2">{employee.DOJ}</td>
+                <td className="border px-4 py-2">Employee ID</td>
+                <td className="border px-4 py-2">{employee.employeeId}</td>
               </tr>
             </tbody>
           </table>
@@ -53,9 +65,7 @@ const EmployeeInfo = ({ employee, manager, isOpen, onDismiss }: any) => {
           <div>
             <p className="py-2">HR settings go here.</p>
             <p className="py-2">Leave balance : </p>
-            <p className="py-2">
-              Performance reviews :
-            </p>
+            <p className="py-2">Performance reviews :</p>
           </div>
         );
       default:
@@ -71,11 +81,9 @@ const EmployeeInfo = ({ employee, manager, isOpen, onDismiss }: any) => {
       styles={{ main: { minWidth: "65%", margin: "auto" } }}
     >
       <div className="flex flex-col p-6">
-        <Icon
-          iconName="ChromeClose"
-          onClick={onDismiss}
-          styles={{ root: { textAlign: "end", cursor: "pointer" } }}
-        />
+        <div className="flex justify-end">
+          <PageIcon iconName="ChromeClose" onClick={onDismiss} />
+        </div>
 
         <div className="flex mb-4">
           <div className="w-1/8">
@@ -92,11 +100,33 @@ const EmployeeInfo = ({ employee, manager, isOpen, onDismiss }: any) => {
               {employee.department} | {employee.jobTitle}
             </p>
 
-            <p className="text-gray-700">{employee.location}</p>
+            <p className="text-gray-700">
+              {employee.location.buildingId} {employee.location.floorName}
+              {", "}
+              {employee.location.floorSection}
+            </p>
             <div className="flex mt-4">
-              <Icon styles={{root:{fontSize:"16px"}}} iconName="Phone" className="mr-4 cursor-pointer" />
-              <Icon styles={{root:{fontSize:"16px"}}} iconName="Mail" className="mr-4 cursor-pointer" />
-              <Icon styles={{root:{fontSize:"16px"}}} iconName="Org" className="mr-4 cursor-pointer" />
+              <PageIcon
+                fontSize="16px"
+                iconName="Phone"
+                className="mr-4 cursor-pointer"
+              />
+              <PageIcon
+                fontSize="16px"
+                iconName="Mail"
+                className="mr-4 cursor-pointer"
+              />
+              <PageIcon
+                fontSize="16px"
+                iconName="Org"
+                className="mr-4 cursor-pointer"
+              />
+              <PageIcon
+                fontSize="16px"
+                iconName="Edit"
+                className="mr-4 cursor-pointer"
+                onClick={() => setOpenEdit(true)}
+              />
             </div>
           </div>
         </div>
@@ -149,11 +179,16 @@ const EmployeeInfo = ({ employee, manager, isOpen, onDismiss }: any) => {
               imageUrl={manager.imageUrl}
               text={manager.name}
               secondaryText={`${manager.jobTitle} | ${manager.department}`}
-              imageInitials={employee.name[0]}
+              imageInitials={manager.name[0]}
               size={PersonaSize.size56}
             />
           </div>
         )}
+        <UpdateUserForm
+          isOpen={openEdit}
+          onDismiss={() => setOpenEdit(false)}
+          user={employee}
+        />
       </div>
     </Modal>
   );

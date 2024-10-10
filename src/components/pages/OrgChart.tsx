@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import { useAuth, useThemes } from "../../context/Context";
 import Heading from "../utils/Heading";
 import Loader from "../custom/Loader";
+import { formatAllUsers } from "../utils/utils";
 
 export default function OrganizationalChart() {
   const [chartData, setChartData] = useState<any>([]);
@@ -54,34 +55,11 @@ export default function OrganizationalChart() {
     console.log("node", node);
   };
 
-  const formatUsers = (users: any) => {
-    const formatedUser = users.map((x: any) => ({
-      id: x.id,
-      name: x.name.fullName ?? "",
-      email: x.primaryEmail ?? "",
-      image: x.thumbnailPhotoUrl ?? "",
-      jobTitle: x.organizations !== undefined ? x.organizations[0].title : "",
-      department:
-        x.organizations !== undefined ? x.organizations[0].department : "",
-      location: x.locations !== undefined ? x.locations[0].floorName : "",
-      manager:
-        x.isAdmin === false
-          ? x.relations !== undefined
-            ? x.relations[0].value
-            : ""
-          : "",
-      phone: x.phones !== undefined ? x.phones[0].value : "",
-      isAdmin: x.isAdmin,
-    }));
-    return formatedUser;
-  };
-
   useEffect(() => {
     setLoading(true);
     getUsers().then(async (users: any) => {
-      const formatedUser = formatUsers(users);
+      const formatedUser = formatAllUsers(users);
       const cu = await getCurrentUser();
-      console.log("formatedUser", { formatedUser, cu });
       getChartData(formatedUser, cu);
       setLoading(false);
     });
@@ -220,7 +198,7 @@ export default function OrganizationalChart() {
                 <div style="${orgChartStyles.name}">${name}</div>
                 <div style="${orgChartStyles.jobTitle}">${jobTitle}</div>
                 <div style="${orgChartStyles.department}">${department}</div>
-                <div style="${orgChartStyles.location}">${location}</div>
+                <div style="${orgChartStyles.location}">${location.buildingId} ${location.floorName} ${location.floorSection}</div>
               </div>
             </div>
           </div>
@@ -237,9 +215,6 @@ export default function OrganizationalChart() {
 
   return (
     <div className="h-screen w-full p-6">
-      {/* <h1 className="text-2xl font-bold mb-4 text-center text-primary">
-        Organizational Chart
-      </h1> */}
       <Heading>Organizational Chart</Heading>
       {loading ? (
         <div className="h-full w-full flex justify-center items-center">

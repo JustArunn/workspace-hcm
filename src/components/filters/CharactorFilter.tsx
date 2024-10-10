@@ -1,11 +1,12 @@
 // import "../../css/main.css";
 import { FC, useState } from "react";
 import { CommandBar, ICommandBarItemProps } from "@fluentui/react";
-import { useThemes } from "../../context/Context";
+import { useAuth, useThemes } from "../../context/Context";
 
-const CharactorFilter: FC<any> = ({ setUsers, allUsers }) => {
+const CharactorFilter: FC<any> = ({ setUsers }) => {
   const { bgColor, fontColor } = useThemes();
   const [activeTab, setActiveTab] = useState("all");
+  const { allUsers } = useAuth()
 
   function handleSearch(text: string, mode: string) {
     // setSearchTexts((prev) => ({ ...prev, [mode]: text }));

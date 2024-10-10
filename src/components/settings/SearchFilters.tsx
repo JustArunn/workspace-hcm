@@ -10,6 +10,8 @@ import {
 } from "@fluentui/react";
 import { useAuth } from "../../context/Context";
 import Button from "../custom/buttons/Button";
+import ToggleButton from "../custom/ToggleButton";
+import PageIconButton from "../custom/icons/PageIconButton";
 
 const ListStyles = {
   contentWrapper: {
@@ -104,7 +106,7 @@ const SearchFilters = () => {
       fieldName: "active",
       minWidth: 100,
       onRender: (item) => (
-        <Toggle
+        <ToggleButton
           checked={item.active}
           onChange={() => handleToggleChange(item.key)}
         />
@@ -116,7 +118,7 @@ const SearchFilters = () => {
       fieldName: "actions",
       minWidth: 100,
       onRender: (item) => (
-        <IconButton
+        <PageIconButton
           iconProps={{ iconName: "Delete" }}
           title="Delete Filter"
           ariaLabel="Delete Filter"

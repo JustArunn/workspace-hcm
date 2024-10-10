@@ -3,9 +3,9 @@ import { useAuth } from "../../context/Context";
 import { useState } from "react";
 import PageIcon from "../custom/icons/PageIcon";
 
-const SearchFilters = ({ setUsers, allUsers }: any) => {
+const SearchFilters = ({ setUsers }: any) => {
   const [searchTexts, setSearchTexts] = useState<{ [key: string]: string }>({});
-  const { searchFilters } = useAuth();
+  const { searchFilters, allUsers } = useAuth();
 
   function handleSearch(text: string, mode: string) {
     setSearchTexts((prev) => ({ ...prev, [mode]: text }));
@@ -20,7 +20,6 @@ const SearchFilters = ({ setUsers, allUsers }: any) => {
           property.toString().toLowerCase().includes(text.trim().toLowerCase())
         );
       });
-      console.log("filteredUsers", filteredUsers);
       setUsers(filteredUsers);
     }
   }

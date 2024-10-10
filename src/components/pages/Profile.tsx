@@ -1,14 +1,18 @@
-import { Icon, PersonaSize } from "@fluentui/react";
+import { PersonaSize } from "@fluentui/react";
 import { useAuth, useThemes } from "../../context/Context";
 import { useEffect, useState } from "react";
+import { formatUser } from "../utils/utils";
 import Person from "../custom/Persona";
 import Heading from "../utils/Heading";
 import Loader from "../custom/Loader";
+import UpdateUserForm from "../common/UpdateUserForm";
+import PageIcon from "../custom/icons/PageIcon";
 
 const ProfileCard = () => {
   const [user, setUser] = useState<any>(null);
   const [manager, setManager] = useState<any>(null);
   const [loadgin, setLoading] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const { getCurrentUser, getUsers } = useAuth();
 
@@ -37,11 +41,15 @@ const ProfileCard = () => {
               </tr>
               <tr>
                 <td className="border px-4 py-2">Office Location</td>
-                <td className="border px-4 py-2">{user.location}</td>
+                <td className="border px-4 py-2">
+                  {user.location.buildingId} {user.location.floorName}
+                  {", "}
+                  {user.location.floorSection}
+                </td>
               </tr>
               <tr>
-                <td className="border px-4 py-2">Date of Joining</td>
-                <td className="border px-4 py-2">{user.DOJ}</td>
+                <td className="border px-4 py-2">Employee ID</td>
+                <td className="border px-4 py-2">{user.employeeId}</td>
               </tr>
               <tr>
                 <td className="border px-4 py-2">Admin</td>
@@ -78,44 +86,14 @@ const ProfileCard = () => {
     getCurrentUser().then(async (email: string) => {
       setLoading(true);
       const users = await getUsers();
-
-      const user = users.find((x: any) => x.primaryEmail === email);
-
-      const userData = {
-        id: user.id,
-        name: user.name.fullName,
-        email: user.primaryEmail,
-        image: user.thumbnailPhotoUrl,
-        jobTitle: user.organizations[0].title,
-        department: user.organizations[0].department,
-        location: user.locations[0].floorName,
-        manager: user.isAdmin === false ? user.relations[0].value : "",
-        phone: user.phones[0].value,
-        isAdmin: user.isAdmin,
-      };
-
-      if (user.isAdmin === true) {
-        setManager(null);
-        setUser(userData);
-        setLoading(false);
-        return;
-      }
-      const userManager = users.find(
-        (x: any) => user.manager === x.primaryEmail
+      const user: any = formatUser(
+        users.find((x: any) => x.primaryEmail === email)
       );
-      const managerData = {
-        id: userManager.id,
-        name: userManager.name.fullName,
-        email: userManager.primaryEmail,
-        image: userManager.thumbnailPhotoUrl,
-        jobTitle: userManager.organizations[0].title,
-        department: userManager.organizations[0].department,
-        location: userManager.locations[0].floorName,
-        manager:
-          userManager.isAdmin === false ? userManager.relations[0].value : "",
-      };
-      setUser(userData);
-      setManager(managerData);
+      const manager = formatUser(
+        users.find((x: any) => user.manager === x.primaryEmail)
+      );
+      setUser(user);
+      setManager(manager);
       setLoading(false);
     });
   }, []);
@@ -127,7 +105,9 @@ const ProfileCard = () => {
       </div>
 
       {loadgin ? (
-        <div className="w-full h-[90vh] flex  items-center justify-center"><Loader /></div>
+        <div className="w-full h-[90vh] flex  items-center justify-center">
+          <Loader />
+        </div>
       ) : (
         <>
           {user !== null && (
@@ -147,22 +127,32 @@ const ProfileCard = () => {
                     {user.department} | {user.jobTitle}
                   </p>
 
-                  <p className="text-gray-700">{user.location}</p>
+                  <p className="text-gray-700">
+                    {user.location.buildingId} {user.location.floorName}
+                    {", "}
+                    {user.location.floorSection}
+                  </p>
                   <div className="flex mt-4">
-                    <Icon
-                      styles={{ root: { fontSize: "16px" } }}
+                    <PageIcon
+                      fontSize="18px"
                       iconName="Phone"
                       className="mr-4 cursor-pointer"
                     />
-                    <Icon
-                      styles={{ root: { fontSize: "16px" } }}
+                    <PageIcon
+                      fontSize="18px"
                       iconName="Mail"
                       className="mr-4 cursor-pointer"
                     />
-                    <Icon
-                      styles={{ root: { fontSize: "16px" } }}
+                    <PageIcon
+                      fontSize="18px"
                       iconName="Org"
                       className="mr-4 cursor-pointer"
+                    />
+                    <PageIcon
+                      fontSize="18px"
+                      iconName="Edit"
+                      className="mr-4 cursor-pointer"
+                      onClick={() => setOpenEdit(true)}
                     />
                   </div>
                 </div>
@@ -223,6 +213,11 @@ const ProfileCard = () => {
                   />
                 </div>
               )}
+              <UpdateUserForm
+                isOpen={openEdit}
+                onDismiss={() => setOpenEdit(false)}
+                user={user}
+              />
             </div>
           )}
         </>
