@@ -5,6 +5,7 @@ import Themes from "../settings/Themes";
 import ManageFeatures from "../settings/ManageFeatures";
 import LicenseDetails from "../settings/LicenseDetails";
 import Notifications from "../settings/Notifications";
+import RolesAndPermisstions from "../settings/RolesAndPermisstions";
 
 const settingsData = [
   {
@@ -84,6 +85,7 @@ const Settings = () => {
         {activeSetting === "Show Hide Feature" && <ManageFeatures />}
         {activeSetting === "License Details" && <LicenseDetails/>}
         {activeSetting === "Notifications Control" && <Notifications/>}
+        {activeSetting === "Roles and Permisstions" && <RolesAndPermisstions/>}
       </div>
     </div>
   );

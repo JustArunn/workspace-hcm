@@ -135,7 +135,7 @@ const UpdateUserForm = ({ isOpen, onDismiss, user }: any) => {
         },
       }}
     >
-      <div className="h-full">
+      <div className="h-full py-4">
         <TextField
           label="Full Name"
           value={formData.name}

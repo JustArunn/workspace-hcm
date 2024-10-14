@@ -1,20 +1,27 @@
 import { useThemes } from "../../context/Context";
 import { Modal, PersonaSize } from "@fluentui/react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import Person from "../custom/Persona";
 import PageIcon from "../custom/icons/PageIcon";
 import UpdateUserForm from "../common/UpdateUserForm";
 
-const EmployeeInfo = ({
+interface IEmployeeInfo {
+  employee: any;
+  manager: any;
+  isOpen: boolean;
+  onDismiss: () => void;
+}
+
+const EmployeeInfo: FC<IEmployeeInfo> = ({
   employee,
   manager,
   isOpen,
   onDismiss,
 }: any) => {
+  if (employee === undefined || employee === null) return;
   const [activeTab, setActiveTab] = useState("office");
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { bgColor } = useThemes();
-
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -88,7 +95,7 @@ const EmployeeInfo = ({
         <div className="flex mb-4">
           <div className="w-1/8">
             <Person
-              imageUrl={employee.imageUrl}
+              imageUrl={employee.image}
               imageInitials={employee.name[0]}
               size={PersonaSize.size100}
               block

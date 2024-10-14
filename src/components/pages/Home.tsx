@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatAllUsers } from "../utils/utils";
 import { useAuth } from "../../context/Context";
 import CharactorFilter from "../filters/CharactorFilter";
 import ViewsTabs from "../navigation/ViewTabs";
@@ -7,7 +8,7 @@ import ListView from "../views/ListView";
 import SearchFilters from "../filters/SearchFilters";
 import NoRecordsFound from "../utils/NoRecordsFound";
 import Loader from "../custom/Loader";
-import { formatAllUsers } from "../utils/utils";
+import Contact from "../views/Contacts";
 
 const Home = () => {
   const [view, setView] = useState("grid");
@@ -15,37 +16,21 @@ const Home = () => {
   const [loadgin, setLoading] = useState(false);
   const { getUsers, setAllUsers } = useAuth();
 
-  const formatUsers = (users: any) => {
-    const formatedUser = formatAllUsers(users);
-    console.log("users formatUsers", formatedUser);
-    setUsers([
-      ...formatedUser,
-      ...formatedUser,
-      ...formatedUser,
-      ...formatedUser,
-      ...formatedUser,
-    ]);
-    setAllUsers([
-      ...formatedUser,
-      ...formatedUser,
-      ...formatedUser,
-      ...formatedUser,
-      ...formatedUser,
-    ]);
-  };
-
   useEffect(() => {
     setLoading(true);
     getUsers().then((users: any) => {
       console.log("users", users);
-      formatUsers(users);
+      setUsers(formatAllUsers(users));
+      setAllUsers(formatAllUsers(users));
       setLoading(false);
     });
   }, []);
 
   return (
     <div className="w-full flex flex-col justify-center items-center h-full">
-      <CharactorFilter users={users} setUsers={setUsers} />
+      <div className="h-full w-full hidden lg:block">
+        <CharactorFilter users={users} setUsers={setUsers} />
+      </div>
       <div className="w-full flex justify-between bg-[rgb(240, 240, 240)]">
         <SearchFilters users={users} setUsers={setUsers} />
         <ViewsTabs setView={setView} />
@@ -60,11 +45,9 @@ const Home = () => {
             <NoRecordsFound className="w-[20%] flex justify-center items-center" />
           ) : (
             <>
-              {view == "grid" ? (
-                <GridView users={users} />
-              ) : (
-                <ListView users={users} />
-              )}
+              {view === "grid" && <GridView users={users} />}
+              {view === "list" && <ListView users={users} />}
+              {view === "contacts" && <Contact users={users} />}
             </>
           )}
         </>

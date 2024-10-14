@@ -1,4 +1,4 @@
-import "@root/css/global.css";
+import "../../css/global.css";
 import { useState } from "react";
 import { Icon } from "@fluentui/react";
 import { Link } from "react-router-dom";

@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { formatAllUsers } from "../components/utils/utils";
 
 const Context = createContext<any>(null);
 
@@ -25,7 +26,8 @@ export const Provider: FC<IProvider> = ({ children }) => {
   const [searchFilters, setSearchFilter] = useState([]);
   const [isNavExpended, setIsNavExpended] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
-  const [allUsers, setAllUsers] = useState([]);
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [admins, setAdmins] = useState([]);
 
   //Themes States
   const [bgColor, setBgColor] = useState("#0078D4");
@@ -56,6 +58,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
       customer: "my_customer",
       maxResults: 10,
       orderBy: "email",
+      projection:"full"
     });
     return response.result.users;
   };
@@ -155,7 +158,6 @@ export const Provider: FC<IProvider> = ({ children }) => {
           scope: scopes,
         })
         .then(async () => {
-          //load clients
           await gapi.client.load("admin", "directory_v1");
           await gapi.client.load("calendar", "v3");
           await gapi.client.load("gmail", "v1");
@@ -166,6 +168,9 @@ export const Provider: FC<IProvider> = ({ children }) => {
             setLoading(false);
             getMeetings();
             getCurrentUser();
+            getUsers().then((users: any[]) => {
+              setAllUsers(formatAllUsers(users));
+            });
           } else {
             setLoggedIn(false);
             setLoading(false);
@@ -211,6 +216,8 @@ export const Provider: FC<IProvider> = ({ children }) => {
     fontColor,
     currentUser,
     allUsers,
+    admins,
+    setAdmins,
     setAllUsers,
     setBgColor,
     setFontColor,

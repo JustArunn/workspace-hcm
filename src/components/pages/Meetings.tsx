@@ -301,7 +301,7 @@ const Meetings = () => {
         ) : (
           <>
             {meetings.length === 0 ? (
-              <NoRecordsFound className="w-[20%]" />
+              <div className="flex justify-center"><NoRecordsFound className="w-[20%]" /></div>
             ) : (
               <ul className="space-y-4">
                 {meetings.map((meeting: any, index: number) => (

@@ -30,7 +30,7 @@ function App() {
     <div className="h-screen">
       <div>
         <div className="flex">
-          <SideNav />
+          <SideNav/>
           <div className="w-[90vw] mx-auto h-full">
             <Routes>
               <Route index element={<Home />} />

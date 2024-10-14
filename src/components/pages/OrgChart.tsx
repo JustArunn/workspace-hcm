@@ -1,19 +1,23 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
+import { useAuth, useThemes } from "../../context/Context";
+import { formatAllUsers } from "../utils/utils";
 import { OrgChart } from "d3-org-chart";
 import * as d3 from "d3";
-import { useAuth, useThemes } from "../../context/Context";
 import Heading from "../utils/Heading";
 import Loader from "../custom/Loader";
-import { formatAllUsers } from "../utils/utils";
+import EmployeeInfo from "../modals/EmployeeInfo";
 
 export default function OrganizationalChart() {
   const [chartData, setChartData] = useState<any>([]);
+  const [user, setUser] = useState<any>(null);
+  const [manager, setManager] = useState<any>(null);
+  const [isOpen, onDismiss] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getUsers, getCurrentUser } = useAuth();
+  const { getUsers, getCurrentUser, allUsers } = useAuth();
   const { bgColor } = useThemes();
 
   const d3Container: any = useRef(null);
-  let chart: any = null;
+  const chart = useMemo(() => new OrgChart(), [chartData]);
 
   const getChartData = (users: any, rootEmail: string) => {
     if (rootEmail === "") return;
@@ -28,6 +32,7 @@ export default function OrganizationalChart() {
           parentId: parentId,
           image: x.image,
           name: x.name,
+          email: x.email,
           jobTitle: x.jobTitle,
           department: x.department,
           location: x.location,
@@ -41,6 +46,7 @@ export default function OrganizationalChart() {
       parentId: "",
       image: root.image,
       name: root.name,
+      email: root.email,
       jobTitle: root.jobTitle !== undefined ? root.jobTitle : "",
       department: root.department,
       location: root.location,
@@ -52,7 +58,11 @@ export default function OrganizationalChart() {
   };
 
   const handleNodeClick = (node: any) => {
-    console.log("node", node);
+    const u: any = allUsers.find((x: any) => x.email === node.data.email);
+    const m: any = allUsers.find((x: any) => x.email === u.manager);
+    setUser(u);
+    setManager(m);
+    onDismiss(true);
   };
 
   useEffect(() => {
@@ -66,10 +76,6 @@ export default function OrganizationalChart() {
   }, []);
 
   useEffect(() => {
-    if (!chart) {
-      chart = new OrgChart();
-    }
-
     chart
       .container(d3Container.current)
       .data(chartData)
@@ -77,7 +83,7 @@ export default function OrganizationalChart() {
       .childrenMargin(() => 60)
       .nodeWidth(() => 200)
       .nodeHeight(() => 115)
-      .onNodeClick((d: any) => handleNodeClick(d))
+      .onNodeClick((n: any) => handleNodeClick(n))
       .buttonContent(({ node }: any) => {
         const buttonStyles = `
           color:#FFF;
@@ -116,24 +122,20 @@ export default function OrganizationalChart() {
           `,
           img: `
             margin-top:-18px;
-            border-radius:100px;
+            border-radius:100%;
             width:50px;
-            // height:60px;
             object-fit:cover;
           `,
           wrapper: `
-            background-color:none;
             margin-left:1px;
             height:${d.height}px;
             border-radius:2px;
-            overflow:visible; 
+            overflow:visible;
           `,
           container: `
             height:${d.height}px;
             padding-top:0px;
-            background-color:#f4f4f4;
             border:1px solid ${bgColor};
-            
           `,
           textWrapper: `
             margin-top:-34px;
@@ -143,7 +145,6 @@ export default function OrganizationalChart() {
             border-radius:1px
           `,
           textContainer: `
-            padding:30px; 
             padding-top:35px;
             text-align:center;
             padding-bottom:10px;
@@ -155,7 +156,6 @@ export default function OrganizationalChart() {
           `,
           jobTitle: `
             font-size:${"12"}px;
-            text-overflow: ${"unset"}
             color:#333;
             margin-top:4px;
           `,
@@ -163,21 +163,15 @@ export default function OrganizationalChart() {
             font-size:${"12"}px;
             color:#404040;
             margin-top:4px;
-            text-overflow: ${"unset"}
           `,
           location: `
             font-size: ${"12"}px;
             color:#404040;
             margin-top:4px;
-            text-overflow: ${"unset"}
           `,
         };
 
         const initial = name[0];
-
-        //---------- Styles for org chart end--------
-
-        // ----------------Org Chart Card------------
 
         return `
         <div style="${orgChartStyles.wrapper}">
@@ -198,7 +192,9 @@ export default function OrganizationalChart() {
                 <div style="${orgChartStyles.name}">${name}</div>
                 <div style="${orgChartStyles.jobTitle}">${jobTitle}</div>
                 <div style="${orgChartStyles.department}">${department}</div>
-                <div style="${orgChartStyles.location}">${location.buildingId} ${location.floorName} ${location.floorSection}</div>
+                <div style="${orgChartStyles.location}">${
+          location.buildingId
+        } ${location.floorName} ${location.floorSection}</div>
               </div>
             </div>
           </div>
@@ -216,6 +212,12 @@ export default function OrganizationalChart() {
   return (
     <div className="h-screen w-full p-6">
       <Heading>Organizational Chart</Heading>
+      <EmployeeInfo
+        isOpen={isOpen}
+        onDismiss={() => onDismiss(false)}
+        employee={user}
+        manager={manager}
+      />
       {loading ? (
         <div className="h-full w-full flex justify-center items-center">
           <Loader />

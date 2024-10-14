@@ -16,6 +16,12 @@ const ViewsTabs = ({ setView }: any) => {
           iconName="BulletedList2"
           onClick={() => setView("list")}
         />
+        <PageIcon
+          fontSize="24px"
+          className="viewIcons"
+          iconName="ContactInfo"
+          onClick={() => setView("contacts")}
+        />
       </div>
     </div>
   );
