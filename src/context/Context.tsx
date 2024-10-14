@@ -28,6 +28,11 @@ export const Provider: FC<IProvider> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState("");
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [admins, setAdmins] = useState([]);
+  const [views, setViews] = useState({
+    grid: true,
+    list: true,
+    contact: true,
+  });
 
   //Themes States
   const [bgColor, setBgColor] = useState("#0078D4");
@@ -58,7 +63,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
       customer: "my_customer",
       maxResults: 10,
       orderBy: "email",
-      projection:"full"
+      projection: "full",
     });
     return response.result.users;
   };
@@ -217,6 +222,8 @@ export const Provider: FC<IProvider> = ({ children }) => {
     currentUser,
     allUsers,
     admins,
+    views,
+    setViews,
     setAdmins,
     setAllUsers,
     setBgColor,

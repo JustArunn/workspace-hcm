@@ -6,6 +6,8 @@ import ManageFeatures from "../settings/ManageFeatures";
 import LicenseDetails from "../settings/LicenseDetails";
 import Notifications from "../settings/Notifications";
 import RolesAndPermisstions from "../settings/RolesAndPermisstions";
+import ManageViews from "../settings/ManageViews";
+import HideProperties from "../settings/HideProperties";
 
 const settingsData = [
   {
@@ -86,6 +88,8 @@ const Settings = () => {
         {activeSetting === "License Details" && <LicenseDetails/>}
         {activeSetting === "Notifications Control" && <Notifications/>}
         {activeSetting === "Roles and Permisstions" && <RolesAndPermisstions/>}
+        {activeSetting === "Manage Views" && <ManageViews/>}
+        {activeSetting === "Hide User Properties" && <HideProperties/>}
       </div>
     </div>
   );
