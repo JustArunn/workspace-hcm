@@ -1,7 +1,7 @@
 import { PersonaSize } from "@fluentui/react";
 import { useAuth, useThemes } from "../../context/Context";
 import { useEffect, useState } from "react";
-import { formatUser } from "../utils/utils";
+import { formatUser, handleEmailClick } from "../utils/utils";
 import Person from "../custom/Persona";
 import Heading from "../utils/Heading";
 import Loader from "../custom/Loader";
@@ -142,6 +142,7 @@ const ProfileCard = () => {
                       fontSize="18px"
                       iconName="Mail"
                       className="mr-4 cursor-pointer"
+                      onClick={()=>handleEmailClick(user.email)}
                     />
                     <PageIcon
                       fontSize="18px"

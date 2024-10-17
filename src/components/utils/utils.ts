@@ -67,3 +67,10 @@ export const formatAllUsers = (users: any[]) => {
   }));
   return fUser;
 };
+
+export const handleEmailClick = (email: string) => {
+  const mailtoLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+    email
+  )}`;
+  window.open(mailtoLink, "_blank");
+};

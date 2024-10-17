@@ -3,6 +3,7 @@ import { useState } from "react";
 import Person from "../custom/Persona";
 import SecondButton from "../custom/buttons/SecondButton";
 import EmployeeInfo from "../modals/EmployeeInfo";
+import { handleEmailClick } from "../utils/utils";
 
 const Card = ({ user, manager }: any) => {
   const [isOpen, onDismiss] = useState(false);
@@ -22,7 +23,10 @@ const Card = ({ user, manager }: any) => {
       <p className="mt-2 text-[14px] text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis">
         {user.jobTitle}
       </p>
-      <p className="mt-1 text-[14px] text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis">
+      <p
+        onClick={() => handleEmailClick(user.email)}
+        className="mt-1 text-[14px] text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis cursor-pointer"
+      >
         {user.email}
       </p>
       <p className="mt-1 text-[14px] text-gray-600 overflow-hidden whitespace-nowrap text-ellipsis">
@@ -38,11 +42,11 @@ const Card = ({ user, manager }: any) => {
         View Profile
       </SecondButton>
       <EmployeeInfo
-          employee={user}
-          manager={manager}
-          isOpen={isOpen}
-          onDismiss={() => onDismiss(false)}
-        />
+        employee={user}
+        manager={manager}
+        isOpen={isOpen}
+        onDismiss={() => onDismiss(false)}
+      />
     </div>
   );
 };

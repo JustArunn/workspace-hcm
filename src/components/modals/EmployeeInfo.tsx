@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import Person from "../custom/Persona";
 import PageIcon from "../custom/icons/PageIcon";
 import UpdateUserForm from "../common/UpdateUserForm";
+import { handleEmailClick } from "../utils/utils";
 
 interface IEmployeeInfo {
   employee: any;
@@ -122,6 +123,7 @@ const EmployeeInfo: FC<IEmployeeInfo> = ({
                 fontSize="16px"
                 iconName="Mail"
                 className="mr-4 cursor-pointer"
+                onClick={()=>handleEmailClick(employee.email)}
               />
               <PageIcon
                 fontSize="16px"
