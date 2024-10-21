@@ -18,7 +18,7 @@ interface IProvider {
 const API_KEY = import.meta.env.VITE_API_KEY;
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const scopes =
-  "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.group.member https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.user.security https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar";
+  "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.group.member https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.user.security https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar";
 
 export const Provider: FC<IProvider> = ({ children }) => {
   const [loggedin, setLoggedIn] = useState(false);
@@ -33,6 +33,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
     list: true,
     contact: true,
   });
+  const [hiddenProperties, setHiddenProperties] = useState<any>([]);
 
   //Themes States
   const [bgColor, setBgColor] = useState("#0078D4");
@@ -223,6 +224,8 @@ export const Provider: FC<IProvider> = ({ children }) => {
     allUsers,
     admins,
     views,
+    hiddenProperties,
+    setHiddenProperties,
     setViews,
     setAdmins,
     setAllUsers,

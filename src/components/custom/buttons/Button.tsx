@@ -15,12 +15,12 @@ const Button: FC<IButtonProps> = (props: any) => {
           outline: "none",
           border: "none",
           "&:hover": {
-            backgroundColor: bgColor,
-            color: fontColor,
+            backgroundColor: props.disabled === false ? bgColor : "",
+            color: props.disabled === false ? fontColor:"",
           },
         },
         rootHovered: {
-          backgroundColor: bgColor,
+          backgroundColor: props.disabled === false ? bgColor : "",
           color: fontColor,
           outline: "none",
           border: "none",

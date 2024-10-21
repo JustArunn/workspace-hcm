@@ -112,7 +112,7 @@ const ListView: FC<IListView> = ({ users }) => {
       minWidth: 150,
       isMultiline: false,
       onRender: (x: any) => (
-        <div style={ListStyles.cellContent}>
+        <div style={{...ListStyles.cellContent, gap:'5px'}}>
           <p>{x.location.buildingId}</p>
           <p>{x.location.floorName}</p>
           <p>{x.location.floorSection}</p>

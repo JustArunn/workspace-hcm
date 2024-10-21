@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ReactSelect from "react-select";
 import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
 } from "@fluentui/react/lib/DetailsList";
-import { IconButton } from "@fluentui/react/lib/Button";
 import { useAuth, useThemes } from "../../context/Context";
 import Button from "../custom/buttons/Button";
 import { Icon } from "@fluentui/react";

@@ -37,6 +37,8 @@ body {
   background-color: #fff;
 }
 
+/* @schedule-x/react css */
+
 .sx-react-calendar-wrapper {
   height: 95vh;
 }

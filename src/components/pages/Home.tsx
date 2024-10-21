@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { formatAllUsers } from "../utils/utils";
+import {
+  formatAllUsers,
+  hideUserProperties,
+} from "../utils/utils";
 import { useAuth } from "../../context/Context";
 import CharactorFilter from "../filters/CharactorFilter";
 import ViewsTabs from "../navigation/ViewTabs";
@@ -14,7 +17,7 @@ const Home = () => {
   const [view, setView] = useState("grid");
   const [users, setUsers] = useState<any>([]);
   const [loadgin, setLoading] = useState(false);
-  const { getUsers, setAllUsers } = useAuth();
+  const { getUsers, setAllUsers, hiddenProperties } = useAuth();
 
   useEffect(() => {
     setLoading(true);
@@ -22,6 +25,12 @@ const Home = () => {
       console.log("users", users);
       setUsers(formatAllUsers(users));
       setAllUsers(formatAllUsers(users));
+      const hUsers = hideUserProperties(
+        formatAllUsers(users),
+        hiddenProperties
+      );
+      console.log("hUsers.......", hUsers);
+      setUsers(hUsers)
       setLoading(false);
     });
   }, []);

@@ -1,3 +1,4 @@
+import EMLOGO from "../../assets/EM.png"
 import ContactUsImage from "../../assets/contact-us.avif";
 import { gapi } from "gapi-script";
 import { useAuth } from "../../context/Context";
@@ -13,7 +14,7 @@ import {
 const API_KEY = import.meta.env.VITE_API_KEY;
 const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const scopes =
-  "https://www.googleapis.com/auth/admin.directory.group.readonly https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.group.member.readonly https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.user.security https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/devstorage.full_control https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/gmail.send";
+  "https://www.googleapis.com/auth/admin.directory.group https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.group.member https://www.googleapis.com/auth/admin.directory.user https://www.googleapis.com/auth/admin.directory.user.security https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/calendar";
 
 const Landing = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -76,11 +77,13 @@ const Navbar = ({ signIn, isScrolled }: any) => {
         isScrolled ? "bg-white shadow-lg" : "bg-transparent"
       }`}
     >
-      <div>Matrix</div>
+      <div>
+        <img className="w-[50px] bg-[#0078D4] rounded-md " src={EMLOGO} />
+      </div>
       <ul className="flex gap-5 select-none">
         <li
           className={`cursor-pointer hidden md:block text-gray-500 ${
-            tab === "home" && "border-b-black border-b"
+            tab === "home" && "border-b-[#0078D4] border-b-2"
           }`}
         >
           <a onClick={() => setTab("home")} href="#home">
@@ -89,7 +92,7 @@ const Navbar = ({ signIn, isScrolled }: any) => {
         </li>
         <li
           className={`cursor-pointer hidden md:block text-gray-500 ${
-            tab === "pricing" && "border-b-black border-b"
+            tab === "pricing" && "border-b-[#0078D4] border-b-2"
           }`}
         >
           <a onClick={() => setTab("pricing")} href="#pricing">
@@ -98,7 +101,7 @@ const Navbar = ({ signIn, isScrolled }: any) => {
         </li>
         <li
           className={`cursor-pointer hidden md:block text-gray-500 ${
-            tab === "contacts" && "border-b-black border-b"
+            tab === "contacts" && "border-b-[#0078D4] border-b-2"
           }`}
         >
           <a onClick={() => setTab("contacts")} href="#contacts">
@@ -107,7 +110,7 @@ const Navbar = ({ signIn, isScrolled }: any) => {
         </li>
         <li
           className={`cursor-pointer hidden md:block text-gray-500 ${
-            tab === "about" && "border-b-black border-b"
+            tab === "about" && "border-b-[#0078D4] border-b-2"
           }`}
         >
           <a onClick={() => setTab("about")} href="#about">

@@ -1,22 +1,25 @@
 import { useMemo, useState, useCallback } from "react";
 import Select from "react-select";
-import { DetailsList, DetailsListLayoutMode, IColumn } from "@fluentui/react";
+import {
+  Checkbox,
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+} from "@fluentui/react";
 import { Modal } from "@fluentui/react";
-import { useAuth } from "../../context/Context";
+import { useAuth, useThemes } from "../../context/Context";
+import Button from "../custom/buttons/Button";
+import PageIcon from "../custom/icons/PageIcon";
 
 interface Employee {
   email: string;
   name: string;
 }
 
-interface HiddenProperties {
-  [key: string]: { [key: string]: boolean };
-}
-
 const HideProperties: React.FC = () => {
-  const [hiddenProperties, setHiddenProperties] = useState<HiddenProperties>(
-    {}
-  );
+  const { hiddenProperties, setHiddenProperties, allUsers } = useAuth();
+  const { bgColor, fontColor } = useThemes();
+
   const [selectedUsers, setSelectedUsers] = useState<
     { value: string; label: string }[]
   >([]);
@@ -27,9 +30,6 @@ const HideProperties: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  const { allUsers } = useAuth();
-
-  // Map all users to a format suitable for react-select
   const employees = useMemo(() => {
     return allUsers.map((user: Employee) => ({
       value: user.email,
@@ -37,7 +37,6 @@ const HideProperties: React.FC = () => {
     }));
   }, [allUsers]);
 
-  // Generate user properties based on the first user
   const userProperties = useMemo(() => {
     return Object.keys(allUsers[0] || {}).map((key) => ({
       value: key,
@@ -45,123 +44,132 @@ const HideProperties: React.FC = () => {
     }));
   }, [allUsers]);
 
-  // Handle user selection
   const handleUserSelection = useCallback((selectedOptions: any) => {
     setSelectedUsers(selectedOptions as { value: string; label: string }[]);
   }, []);
 
-  // Handle property selection
   const handlePropertySelection = useCallback((selectedOptions: any) => {
     setSelectedProperties(
       selectedOptions as { value: string; label: string }[]
     );
   }, []);
 
-  // Handle select all users
   const handleSelectAll = useCallback(
     (isChecked: boolean) => {
       setSelectAll(isChecked);
-      if (isChecked) {
-        setSelectedUsers(employees);
-      } else {
-        setSelectedUsers([]);
-      }
+      setSelectedUsers(isChecked ? employees : []);
     },
     [employees]
   );
 
-  // Apply hiding properties for selected users
   const applyHiding = useCallback(() => {
     const propertiesToHide = selectedProperties.map((prop) => prop.value);
+    const updatedProperties = [...hiddenProperties];
 
-    setHiddenProperties((prev) => {
-      const updatedProperties = { ...prev };
-      selectedUsers.forEach((user) => {
-        updatedProperties[user.value] = {
-          ...(updatedProperties[user.value] || {}),
-          ...propertiesToHide.reduce((acc, prop) => {
-            acc[prop] = true;
-            return acc;
-          }, {} as Record<string, boolean>),
-        };
+    selectedUsers.forEach((user) => {
+      const existingEntry = updatedProperties.find(
+        (entry) => entry.email === user.value
+      );
+      if (existingEntry) {
+        existingEntry.properties = [
+          ...new Set([...existingEntry.properties, ...propertiesToHide]),
+        ];
+      } else {
+        updatedProperties.push({
+          email: user.value,
+          properties: propertiesToHide,
+        });
+      }
+      console.log({
+        email: user.value,
+        properties: propertiesToHide,
       });
-      return updatedProperties;
     });
-  }, [selectedProperties, selectedUsers]);
 
-  // Include properties for the current user
+    setHiddenProperties(updatedProperties);
+  }, [selectedProperties, selectedUsers, hiddenProperties]);
+
   const includeProperties = (userId: string) => {
     setCurrentUserId(userId);
     setIsModalOpen(true);
-    setSelectedProperties([]); // Reset selected properties when opening modal
+    setSelectedProperties([]);
   };
 
-  // Handle include action
   const handleInclude = () => {
     if (currentUserId) {
-      setHiddenProperties((prev) => ({
-        ...prev,
-        [currentUserId]: {},
-      }));
+      setHiddenProperties((prev: any) => {
+        return prev.map((entry: any) => {
+          if (entry.email === currentUserId) {
+            // Remove only the properties that are included
+            const newProperties = entry.properties.filter(
+              (prop: string) =>
+                !selectedProperties.some(
+                  (selected: any) => selected.value === prop
+                )
+            );
+            return { ...entry, properties: newProperties };
+          }
+
+          return entry;
+        });
+      });
     }
     setIsModalOpen(false);
   };
 
-  // Define columns for the details list
-  const columns: IColumn[] = [
-    { key: "column1", name: "User Name", fieldName: "name", minWidth: 100 },
-    {
-      key: "column2",
-      name: "Hidden Properties",
-      fieldName: "hiddenProps",
-      minWidth: 100,
-    },
-    { key: "column3", name: "Actions", fieldName: "actions", minWidth: 100 },
-  ];
+  console.log("hiddenProperties", hiddenProperties);
 
-  // Generate list items to display
+  const columns = useMemo(
+    () => [
+      { key: "column1", name: "User Name", fieldName: "name", minWidth: 200 },
+      {
+        key: "column2",
+        name: "Hidden Properties",
+        fieldName: "hiddenProps",
+        minWidth: 250,
+      },
+      { key: "column3", name: "Actions", fieldName: "actions", minWidth: 200 },
+    ],
+    []
+  );
+
   const items = useMemo(() => {
     return employees
-      .map((user: any) => ({
-        key: user.value,
-        name: user.label,
-        hiddenProps: hiddenProperties[user.value]
-          ? Object.keys(hiddenProperties[user.value]).join(", ")
-          : "None",
-        actions: (
-          <button onClick={() => includeProperties(user.value)}>
-            Include Properties
-          </button>
-        ),
-      }))
-      .filter(
-        (item: any) =>
-          hiddenProperties[item.key] &&
-          Object.keys(hiddenProperties[item.key]).length > 0
-      );
+      .map((user: any) => {
+        const hiddenEntry = hiddenProperties.find(
+          (entry: any) => entry.email === user.value
+        );
+        return {
+          key: user.value,
+          name: user.label,
+          hiddenProps: hiddenEntry ? hiddenEntry.properties.join(", ") : "None",
+          actions: (
+            <PageIcon
+              fontSize="16px"
+              iconName="Edit"
+              onClick={() => includeProperties(user.value)}
+            />
+          ),
+        };
+      })
+      .filter((item: any) => item.hiddenProps !== "None");
   }, [employees, hiddenProperties]);
 
   const currentUserHiddenProperties =
-    hiddenProperties[currentUserId || ""] || {};
-  const availablePropertiesToInclude = userProperties.filter(
-    (prop) => currentUserHiddenProperties[prop.value]
+    hiddenProperties.find((entry: any) => entry.email === currentUserId)
+      ?.properties || [];
+  const availablePropertiesToInclude = userProperties.filter((prop) =>
+    currentUserHiddenProperties.includes(prop.value)
   );
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Employee Directory</h1>
-
       <div className="mb-4">
-        <label className="block mb-2">
-          <input
-            type="checkbox"
-            checked={selectAll}
-            onChange={(e) => handleSelectAll(e.target.checked)}
-            className="mr-2"
-          />
-          Select All Users
-        </label>
-
+        <Checkbox
+          checked={selectAll}
+          onChange={(e: any) => handleSelectAll(e.target.checked)}
+          label="Select All Users"
+        />
         <Select
           isMulti
           options={employees}
@@ -182,12 +190,7 @@ const HideProperties: React.FC = () => {
         />
       </div>
 
-      <button
-        onClick={applyHiding}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Apply Hiding
-      </button>
+      <Button onClick={applyHiding}>Apply</Button>
 
       <div className="mt-4">
         <h3 className="font-medium">Hidden Properties:</h3>
@@ -196,35 +199,38 @@ const HideProperties: React.FC = () => {
           columns={columns}
           setKey="set"
           layoutMode={DetailsListLayoutMode.fixedColumns}
+          selectionMode={SelectionMode.none}
         />
       </div>
 
-      {/* Modal for including properties */}
       <Modal
         isOpen={isModalOpen}
         onDismiss={() => setIsModalOpen(false)}
         isBlocking={false}
+        styles={{ main: { minWidth: "35%", maxWidth: "35%" } }}
       >
-        <div className="p-4">
-          <h2 className="text-xl mb-2">
-            Include Properties for{" "}
-            {employees.find((emp: any) => emp.value === currentUserId)?.label}
-          </h2>
-          <Select
-            isMulti
-            options={availablePropertiesToInclude}
-            onChange={handlePropertySelection}
-            className="mt-2"
-            menuShouldBlockScroll
-            menuPosition="fixed"
-            placeholder="Select properties to include..."
-          />
-          <button
-            onClick={handleInclude}
-            className="mt-4 bg-green-500 text-white px-4 py-2 rounded"
+        <div className="h-full w-full flex flex-col">
+          <h2
+            style={{ backgroundColor: bgColor, color: fontColor }}
+            className="h-full w-full text-xl mb-2 flex justify-center gap-2 items-center p-2"
           >
-            Include Properties
-          </button>
+            <p className="text-lg">Include Properties for</p>
+            <p className="text-lg underline">
+              {employees.find((emp: any) => emp.value === currentUserId)?.label}
+            </p>
+          </h2>
+          <div className="p-5 justify-center flex flex-col gap-y-5">
+            <Select
+              isMulti
+              options={availablePropertiesToInclude}
+              onChange={handlePropertySelection}
+              className="mt-2"
+              menuShouldBlockScroll
+              menuPosition="fixed"
+              placeholder="Select properties to include..."
+            />
+            <Button onClick={handleInclude}>Include Properties</Button>
+          </div>
         </div>
       </Modal>
     </div>

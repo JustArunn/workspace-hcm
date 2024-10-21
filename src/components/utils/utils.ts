@@ -1,5 +1,5 @@
 export const formatUser = (x: any) => {
-  if(x === undefined || x === null){
+  if (x === undefined || x === null) {
     return null;
   }
   return {
@@ -73,4 +73,24 @@ export const handleEmailClick = (email: string) => {
     email
   )}`;
   window.open(mailtoLink, "_blank");
+};
+
+export const hideUserProperties = (users: any, propertiesToHide: any) => {
+  const hideMap = new Map();
+  // Build a map for properties to hide based on emails
+  propertiesToHide.forEach((item: any) => {
+    hideMap.set(item.email, item.properties);
+  });
+  return users.map((user: any) => {
+    const properties = hideMap.get(user.email);
+    if (properties) {
+      // Create a new object, setting specified properties to an empty string
+      return Object.keys(user).reduce((obj: any, key: any) => {
+        obj[key] = properties?.includes(key) ? "" : user[key];
+        return obj;
+      }, {});
+    }
+    // Return user as is if no properties to hide
+    return user;
+  });
 };

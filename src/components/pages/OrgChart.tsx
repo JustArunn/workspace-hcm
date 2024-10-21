@@ -172,6 +172,7 @@ export default function OrganizationalChart() {
         };
 
         const initial = name[0];
+        const fullAddress = `${location.buildingId} ${location.floorName} ${location.floorSection}`;
 
         return `
         <div style="${orgChartStyles.wrapper}">
@@ -192,9 +193,7 @@ export default function OrganizationalChart() {
                 <div style="${orgChartStyles.name}">${name}</div>
                 <div style="${orgChartStyles.jobTitle}">${jobTitle}</div>
                 <div style="${orgChartStyles.department}">${department}</div>
-                <div style="${orgChartStyles.location}">${
-          location.buildingId
-        } ${location.floorName} ${location.floorSection}</div>
+                <div style="${orgChartStyles.location}">${fullAddress}</div>
               </div>
             </div>
           </div>
@@ -224,12 +223,6 @@ export default function OrganizationalChart() {
         </div>
       ) : (
         <div
-          style={{
-            position: "relative",
-            // scale: "0.8",
-            display: "flex",
-            justifyContent: "center",
-          }}
           ref={d3Container}
           id={"D3orgchart"}
         />

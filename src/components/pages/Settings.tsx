@@ -8,6 +8,7 @@ import Notifications from "../settings/Notifications";
 import RolesAndPermisstions from "../settings/RolesAndPermisstions";
 import ManageViews from "../settings/ManageViews";
 import HideProperties from "../settings/HideProperties";
+import ExcludeUsers from "../settings/ExcludeUsers";
 
 const settingsData = [
   {
@@ -58,7 +59,7 @@ const Settings = () => {
 
   return (
     <div className="flex">
-      <div className="-ml-7 w-64 border-r text-black p-5 pr-0 overflow-y-auto max-h-screen">
+      <div className="-ml-7 w-[25%] border-r text-black p-5 pr-0 overflow-y-auto max-h-screen">
         <h3 className="text-xl font-semibold">Settings</h3>
         {settingsData.map((section, index) => (
           <div key={index}>
@@ -80,7 +81,7 @@ const Settings = () => {
         ))}
       </div>
 
-      <div className="flex-grow p-6 bg-white overflow-y-auto max-h-screen">
+      <div className="w-full flex-grow p-6 bg-white overflow-y-auto max-h-screen">
         <h2 className="text-2xl font-semibold mb-5">{activeSetting}</h2>
         {activeSetting === "Search Filters" && <SearchFilters />}
         {activeSetting === "Theme" && <Themes />}
@@ -90,6 +91,7 @@ const Settings = () => {
         {activeSetting === "Roles and Permisstions" && <RolesAndPermisstions/>}
         {activeSetting === "Manage Views" && <ManageViews/>}
         {activeSetting === "Hide User Properties" && <HideProperties/>}
+        {activeSetting === "Exclude Users" && <ExcludeUsers/>}
       </div>
     </div>
   );

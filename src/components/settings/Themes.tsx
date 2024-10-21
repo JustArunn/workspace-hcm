@@ -24,9 +24,7 @@ const Themes: React.FC = () => {
   ];
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Color Theme Selector</h1>
-      <p className="mb-2">Choose your theme:</p>
+    <div className="p-2">
       <div className="grid grid-cols-3 gap-4 mb-4">
         {colorOptions.map(({ bg, font }, index) => (
           <div

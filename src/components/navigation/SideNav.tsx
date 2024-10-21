@@ -130,6 +130,18 @@ const SideNav = () => {
             {isNavExpended && <span>Settings</span>}
           </Link>
         </li>
+        <li title="HelpDesk">
+          <Link
+            onClick={() => setActiveTab("helpdesk")}
+            className={
+              activeTab === "helpdesk" ? `activeTab flex gap-2` : `flex gap-2`
+            }
+            to={"/helpdesk"}
+          >
+            <Icon styles={{ root: { color: fontColor } }} iconName="TaskManager" />
+            {isNavExpended && <span>Helpdesk</span>}
+          </Link>
+        </li>
         <li title="SignOut">
           <Link className="flex gap-2" onClick={signOut} to={"/#"}>
             <Icon styles={{ root: { color: fontColor } }} iconName="SignOut" />

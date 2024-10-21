@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/Context";
 import Calendar from "./components/pages/Calendar";
 import SideNav from "./components/navigation/SideNav";
@@ -10,6 +10,8 @@ import Home from "./components/pages/Home";
 import Meetings from "./components/pages/Meetings";
 import OrganizationalChart from "./components/pages/OrgChart";
 import Loader from "./components/custom/Loader";
+import HelpDesk from "./components/pages/HelpDesk";
+import NotFound from "./components/pages/NotFound";
 
 function App() {
   const { loggedin, loading } = useAuth();
@@ -17,7 +19,7 @@ function App() {
   if (loading) {
     return (
       <div className="h-screen w-screen flex justify-center items-center">
-        <Loader/>
+        <Loader />
       </div>
     );
   }
@@ -30,7 +32,7 @@ function App() {
     <div className="h-screen">
       <div>
         <div className="flex">
-          <SideNav/>
+          <SideNav />
           <div className="w-[90vw] mx-auto h-full">
             <Routes>
               <Route index element={<Home />} />
@@ -40,6 +42,8 @@ function App() {
               <Route path="/settings" element={<Settings />} />
               <Route path="/meetings" element={<Meetings />} />
               <Route path="/org-chart" element={<OrganizationalChart />} />
+              {/* <Route path="/helpdesk" element={<HelpDesk />} /> */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </div>
