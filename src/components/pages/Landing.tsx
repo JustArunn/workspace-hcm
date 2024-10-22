@@ -128,7 +128,7 @@ const Navbar = ({ signIn, isScrolled }: any) => {
 const Hero = ({ signIn }: any) => {
   return (
     <div className="w-full flex justify-center items-center flex-col gap-y-3 p-4 md:p-0">
-      <h1 className="md:text-4xl font-medium text-primary">
+      <h1 className="md:text-4xl font-medium text-[#0078D4]">
         Simplify Your Google Workspace Management
       </h1>
       <h2 className="md:text-2xl text-gray-700">
