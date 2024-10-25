@@ -1,4 +1,4 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/Context";
 import Calendar from "./components/pages/Calendar";
 import SideNav from "./components/navigation/SideNav";
@@ -42,7 +42,7 @@ function App() {
               <Route path="/settings" element={<Settings />} />
               <Route path="/meetings" element={<Meetings />} />
               <Route path="/org-chart" element={<OrganizationalChart />} />
-              {/* <Route path="/helpdesk" element={<HelpDesk />} /> */}
+              <Route path="/helpdesk" element={<HelpDesk />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

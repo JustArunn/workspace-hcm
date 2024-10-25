@@ -1,3 +1,5 @@
+import Button from "../custom/buttons/Button";
+
 const licenses = [
   {
     id: 1,
@@ -23,9 +25,9 @@ const licenses = [
   {
     id: 4,
     planName: "Trial Plan",
-    startDate: "2023-10-01",
-    expirationDate: "2023-10-05",
-    price: 49.99,
+    startDate: "2024-10-25",
+    expirationDate: "2024-11-8",
+    price: 0,
   },
 ];
 
@@ -62,6 +64,9 @@ const LicenseDetails = () => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               License Price ($)
             </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Upgrade
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -80,8 +85,13 @@ const LicenseDetails = () => {
                 {calculateDaysLeft(license.expirationDate)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                {license.price.toFixed(2)}
+                ${license.price.toFixed(2)}
               </td>
+              {license.planName !== "Trial Plan" && (
+                <td>
+                  <Button>Upgrade</Button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

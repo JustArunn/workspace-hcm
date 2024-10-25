@@ -25,12 +25,12 @@ const Home = () => {
       console.log("users", users);
       setUsers(formatAllUsers(users));
       setAllUsers(formatAllUsers(users));
-      const hUsers = hideUserProperties(
+      const userWitHiddenProperties = hideUserProperties(
         formatAllUsers(users),
         hiddenProperties
       );
-      console.log("hUsers.......", hUsers);
-      setUsers(hUsers)
+      console.log("hUsers.......", userWitHiddenProperties);
+      setUsers(userWitHiddenProperties);
       setLoading(false);
     });
   }, []);

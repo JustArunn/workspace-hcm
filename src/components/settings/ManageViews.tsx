@@ -1,4 +1,4 @@
-import { Checkbox, Text } from "@fluentui/react";
+import { Checkbox } from "@fluentui/react";
 import { useAuth } from "../../context/Context";
 
 const ManageViews = () => {
@@ -13,8 +13,7 @@ const ManageViews = () => {
   };
 
   return (
-    <div className="h-full w-full">
-      <Text variant="large">Select Views:</Text>
+    <div className="w-full">
       <div className="flex justify-around mt-10">
         <Checkbox
           name="grid"

@@ -3,6 +3,7 @@ import { TextField } from "@fluentui/react";
 import NoRecordsFound from "../utils/NoRecordsFound";
 import { useThemes } from "../../context/Context";
 import PageIcon from "../custom/icons/PageIcon";
+import Person from "../custom/Persona";
 
 // const employees = [
 //   { id: 1, name: "Alice Johnson", phone: "555-1234" },
@@ -62,13 +63,12 @@ const Contact = ({ users }: any) => {
               >
                 <div className="flex justify-between items-center w-full">
                   <div>
-                    <span className="block font-bold">{employee.name}</span>
-                    <a
-                      href={`tel:${employee.phone}`}
-                      className="text-gray-600 hover:underline"
-                    >
-                      {employee.phone}
-                    </a>
+                    <Person
+                      imageUrl={employee.image}
+                      imageInitials={employee.name[0]}
+                      text={employee.name}
+                      secondaryText={employee.phone}
+                    />
                   </div>
 
                   <a

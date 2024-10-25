@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "../../context/Context";
+import { useAuth, useThemes } from "../../context/Context";
+import Button from "../custom/buttons/Button";
 
 const employees = [
   { id: 1, name: "HR" },
@@ -11,6 +12,7 @@ const employees = [
 const Notifications = () => {
   const [activeTab, setActiveTab] = useState("birthdays");
   const { sendEmail } = useAuth();
+  const { bgColor, fontColor } = useThemes();
   const [recipients, setRecipients] = useState({
     birthdays: [],
     anniversaries: [],
@@ -28,11 +30,6 @@ const Notifications = () => {
   };
 
   const handleSave = async () => {
-    // const settings = {
-    //   recipients,
-    // };
-    // // Save settings logic here (e.g., API call)
-    // console.log(settings);
     await sendEmail(
       [
         "just.arunn@gmail.com",
@@ -47,37 +44,35 @@ const Notifications = () => {
 
   return (
     <div className=" mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
-        Notification Settings
-      </h2>
-
       <div className="flex mb-4">
         <button
-          className={`flex-1 py-2 text-center ${
-            activeTab === "birthdays"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
+          style={{
+            backgroundColor: activeTab === "birthdays" ? bgColor : "white",
+            color: activeTab === "birthdays" ? fontColor : "black",
+          }}
+          className={`flex-1 py-2 text-center`}
           onClick={() => setActiveTab("birthdays")}
         >
           Birthdays
         </button>
+
         <button
-          className={`flex-1 py-2 text-center ${
-            activeTab === "anniversaries"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
+          style={{
+            backgroundColor: activeTab === "anniversaries" ? bgColor : "white",
+            color: activeTab === "anniversaries" ? fontColor : "black",
+          }}
+          className={`flex-1 py-2 text-center`}
           onClick={() => setActiveTab("anniversaries")}
         >
           Anniversaries
         </button>
+
         <button
-          className={`flex-1 py-2 text-center ${
-            activeTab === "incorrectInfo"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 text-gray-700"
-          }`}
+          style={{
+            backgroundColor: activeTab === "incorrectInfo" ? bgColor : "white",
+            color: activeTab === "incorrectInfo" ? fontColor : "black",
+          }}
+          className={`flex-1 py-2 text-center`}
           onClick={() => setActiveTab("incorrectInfo")}
         >
           Incorrect Info
@@ -150,12 +145,9 @@ const Notifications = () => {
         </div>
       )}
 
-      <button
-        onClick={handleSave}
-        className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-200"
-      >
-        Save Settings
-      </button>
+      <Button onClick={handleSave} className="mt-4">
+        Save
+      </Button>
     </div>
   );
 };

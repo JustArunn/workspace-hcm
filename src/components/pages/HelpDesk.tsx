@@ -298,7 +298,15 @@ const TicketDescription = ({ ticket, isOpen, onDismiss }: any) => {
         onDismiss={onDismiss}
         type={PanelType.smallFluid}
       >
-        <div>TicketDescription :{JSON.stringify(ticket)}</div>
+        <pre
+          style={{
+            color: "hsl(114, 100%, 35%)",
+            backgroundColor: "#000",
+            padding: "10px",
+          }}
+        >
+          {JSON.stringify(ticket, null, 2)}
+        </pre>
       </Panel>
     </div>
   );
