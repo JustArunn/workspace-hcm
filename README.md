@@ -1,4 +1,4 @@
-# <img src="https://github.com/user-attachments/assets/18d21af8-3ed3-403b-8e01-542e74cf8f1c" alt="Employee Matrix" width="40px"> Employee Matrix
+# Employee Management
 
 - Simplify Your Google Workspace Management
 
