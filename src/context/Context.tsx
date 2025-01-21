@@ -34,6 +34,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
     contact: true,
   });
   const [hiddenProperties, setHiddenProperties] = useState<any>([]);
+  const [isWorkspaceAccount, setIsWorkspaceAccount] = useState(false);
 
   //Themes States
   const [bgColor, setBgColor] = useState("#0078D4");
@@ -66,7 +67,12 @@ export const Provider: FC<IProvider> = ({ children }) => {
       orderBy: "email",
       projection: "full",
     });
-    return response.result.users;
+    if(response.error !== null || response.error !== undefined || response.error.code == 400){
+      setIsWorkspaceAccount(false);
+    }else{
+      setIsWorkspaceAccount(true);
+      return response.result.users;
+    }
   };
 
   const getCalendarEvents = async () => {
@@ -225,6 +231,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
     admins,
     views,
     hiddenProperties,
+    isWorkspaceAccount,
     setHiddenProperties,
     setViews,
     setAdmins,
@@ -240,6 +247,7 @@ export const Provider: FC<IProvider> = ({ children }) => {
     getMeetings,
     getCurrentUser,
     sendEmail,
+    setIsWorkspaceAccount
   };
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

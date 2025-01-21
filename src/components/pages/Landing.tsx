@@ -1,4 +1,3 @@
-import EMLOGO from "../../assets/EM.png"
 import ContactUsImage from "../../assets/contact-us.avif";
 import { gapi } from "gapi-script";
 import { useAuth } from "../../context/Context";
@@ -78,7 +77,7 @@ const Navbar = ({ signIn, isScrolled }: any) => {
       }`}
     >
       <div>
-        <img className="w-[50px] bg-[#0078D4] rounded-md " src={EMLOGO} />
+        <h1 className="text-xl">Employee Management</h1>
       </div>
       <ul className="flex gap-5 select-none">
         <li
