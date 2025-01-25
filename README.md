@@ -1,10 +1,9 @@
 # Employee Management
-
 - Simplify Your Google Workspace Management
 
 ## Application Preview
 
-![image](https://github.com/user-attachments/assets/cddef92b-abe8-4dae-88c9-0a07e1759485)
+![Landing](https://github.com/user-attachments/assets/14093e7d-29e7-492f-8b7f-8294ccc896b0)
 ![1](https://github.com/user-attachments/assets/b3882b3e-dbeb-4588-91bb-0e34fe37feca)
 ![2](https://github.com/user-attachments/assets/53b0a4f8-db16-440d-af5e-8e895ee35919)
 ![3](https://github.com/user-attachments/assets/f1bea2b0-ae34-4264-8b16-cbfda00f7581)
