@@ -1,4 +1,6 @@
 import ContactUsImage from "../../assets/contact-us.avif";
+import HeroImage from "../../assets/hero-image.png";
+import HCMLogo from "../../assets/workspace-hcm-header.png";
 import { gapi } from "gapi-script";
 import { useAuth } from "../../context/Context";
 import GoogleButton from "../custom/buttons/GoogleButton";
@@ -76,8 +78,9 @@ const Navbar = ({ signIn, isScrolled }: any) => {
         isScrolled ? "bg-white shadow-lg" : "bg-transparent"
       }`}
     >
-      <div>
-        <h1 className="text-xl">Employee Management</h1>
+      <div className="w-[210px] ">
+        {/* <h1 className="text-xl">Workspace HCM</h1> */}
+        <img src={HCMLogo} />
       </div>
       <ul className="flex gap-5 select-none">
         <li
@@ -141,7 +144,7 @@ const Hero = ({ signIn }: any) => {
       <div className="w-full flex justify-center mt-4">
         <GoogleButton width="40%" onClick={signIn} />
       </div>
-      <svg
+      {/* <svg
         className="hidden lg:block"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1440 320"
@@ -151,7 +154,10 @@ const Hero = ({ signIn }: any) => {
           fillOpacity="1"
           d="M0,64L30,58.7C60,53,120,43,180,64C240,85,300,139,360,149.3C420,160,480,128,540,106.7C600,85,660,75,720,101.3C780,128,840,192,900,234.7C960,277,1020,299,1080,272C1140,245,1200,171,1260,170.7C1320,171,1380,245,1410,282.7L1440,320L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"
         />
-      </svg>
+      </svg> */}
+      <div className="w-full flex justify-center mt-4">
+        <img src={HeroImage} width={1200} />
+      </div>
     </div>
   );
 };

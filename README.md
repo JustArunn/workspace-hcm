@@ -1,4 +1,4 @@
-# Employee Management
+# Workspace HCM
 - Simplify Your Google Workspace Management
 
 ## Application Preview
